@@ -2,9 +2,7 @@ package com.smilehacker.coroutinestest
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import kotlin.concurrent.thread
@@ -25,26 +23,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun testThread() {
-        thread {
-            val jobs = List(100_00) {
-                thread {
-                    Thread.sleep(1000L)
-                    Log.i("thread", "I'm Thread ${Thread.currentThread().name}")
-                }
+        repeat(100_000) {
+            thread {
+//                Log.i("thread", "I'm Thread $it, run on ${Thread.currentThread().name}")
+                Thread.sleep(1000L)
             }
-            jobs.forEach(Thread::join)
         }
     }
 
     private fun testCoroutines() {
-        thread {
-            val jobs = List(100_000) {
-                launch(CommonPool) {
-                    delay(1000L)
-                    Log.i("thread", "I'm Thread ${Thread.currentThread().name}")
-                }
+        repeat(100_000) {
+            launch {
+//                Log.i("coroutines", "I'm Thread $it, run on ${Thread.currentThread().name}")
+                delay(1000)
             }
-            jobs.forEach { it.start()}
         }
     }
 }
